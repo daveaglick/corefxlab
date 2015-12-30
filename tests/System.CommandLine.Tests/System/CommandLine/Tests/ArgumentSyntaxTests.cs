@@ -162,7 +162,7 @@ namespace System.CommandLine.Tests
         [Fact]
         public void Command_Usage_Error_Missing()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse(string.Empty, syntax =>
                 {
@@ -170,13 +170,13 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("missing command", ex.Message);
+            Assert.Equal("missing command", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
         public void Command_Usage_Error_Invalid()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("d", syntax =>
                 {
@@ -184,7 +184,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("unknown command 'd'", ex.Message);
+            Assert.Equal("unknown command 'd'", ex.InnerExceptions[0].Message);
         }
 
         [Theory]
@@ -364,7 +364,7 @@ namespace System.CommandLine.Tests
         [Fact]
         public void Option_Usage_Error_Invalid()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("-e -d", syntax =>
                 {
@@ -373,13 +373,13 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("invalid option -d", ex.Message);
+            Assert.Equal("invalid option -d", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
         public void Option_Usage_Error_Conversion_Int32()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("-o abc", syntax =>
                 {
@@ -388,13 +388,13 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("value 'abc' isn't valid for -o: Input string was not in a correct format.", ex.Message);
+            Assert.Equal("value 'abc' isn't valid for -o: Input string was not in a correct format.", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
         public void Option_Usage_Error_Conversion_Boolean()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("-o:abc", syntax =>
                 {
@@ -403,7 +403,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("value 'abc' isn't valid for -o: String was not recognized as a valid Boolean.", ex.Message);
+            Assert.Equal("value 'abc' isn't valid for -o: String was not recognized as a valid Boolean.", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
@@ -414,7 +414,7 @@ namespace System.CommandLine.Tests
                 throw new FormatException("invalid format");
             };
 
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("-o abc", syntax =>
                 {
@@ -423,7 +423,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("value 'abc' isn't valid for -o: invalid format", ex.Message);
+            Assert.Equal("value 'abc' isn't valid for -o: invalid format", ex.InnerExceptions[0].Message);
         }
 
         [Theory]
@@ -433,7 +433,7 @@ namespace System.CommandLine.Tests
         [InlineData("-a : -b")]
         public void Option_Usage_Error_RequiresValue(string commandLine)
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse(commandLine, syntax =>
                 {
@@ -442,7 +442,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("option -a requires a value", ex.Message);
+            Assert.Equal("option -a requires a value", ex.InnerExceptions[0].Message);
         }
 
         [Theory]
@@ -488,7 +488,7 @@ namespace System.CommandLine.Tests
         [Fact]
         public void Option_Usage_Error_Flag_Bundle_ViaDashDash()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("--opq", syntax =>
                 {
@@ -498,7 +498,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("invalid option --opq", ex.Message);
+            Assert.Equal("invalid option --opq", ex.InnerExceptions[0].Message);
         }
 
         [Theory]
@@ -811,7 +811,7 @@ namespace System.CommandLine.Tests
         [Fact]
         public void Parameter_Usage_Error_Extra()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("-a a -b b c", syntax =>
                 {
@@ -822,13 +822,13 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("extra parameter 'c'", ex.Message);
+            Assert.Equal("extra parameter 'c'", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
         public void Parameter_Usage_Error_Conversion_Int32()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("abc", syntax =>
                 {
@@ -837,13 +837,13 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("value 'abc' isn't valid for <p>: Input string was not in a correct format.", ex.Message);
+            Assert.Equal("value 'abc' isn't valid for <p>: Input string was not in a correct format.", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
         public void Parameter_Usage_Error_Conversion_Boolean()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("abc", syntax =>
                 {
@@ -852,7 +852,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("value 'abc' isn't valid for <p>: String was not recognized as a valid Boolean.", ex.Message);
+            Assert.Equal("value 'abc' isn't valid for <p>: String was not recognized as a valid Boolean.", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
@@ -863,7 +863,7 @@ namespace System.CommandLine.Tests
                 throw new FormatException("invalid format");
             };
 
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("abc", syntax =>
                 {
@@ -872,7 +872,7 @@ namespace System.CommandLine.Tests
                 });
             });
 
-            Assert.Equal("value 'abc' isn't valid for <p>: invalid format", ex.Message);
+            Assert.Equal("value 'abc' isn't valid for <p>: invalid format", ex.InnerExceptions[0].Message);
         }
 
         [Theory]
@@ -998,12 +998,12 @@ namespace System.CommandLine.Tests
         [Fact]
         public void ResponseFiles_Error_DoesNotExist()
         {
-            var ex = Assert.Throws<ArgumentSyntaxException>(() =>
+            var ex = Assert.Throws<AggregateException>(() =>
             {
                 Parse("@6FF54573-5066-46BA-8457-0CF8AA402561", syntax => { });
             });
 
-            Assert.Equal("Response file '6FF54573-5066-46BA-8457-0CF8AA402561' doesn't exist.", ex.Message);
+            Assert.Equal("Response file '6FF54573-5066-46BA-8457-0CF8AA402561' doesn't exist.", ex.InnerExceptions[0].Message);
         }
 
         [Fact]
